@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="golang,ethereum," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Andy的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Go EthereumOfficial golang implementation of the Ethereum protocol.  Automated builds are available for stable releases and the unstable master branch.Binary archives are published at https://geth.eth">
+<meta name="keywords" content="golang,ethereum">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go-ethereum">
+<meta property="og:url" content="http://andyli.me/2018/01/09/go-ethereum/index.html">
+<meta property="og:site_name" content="Andy的博客">
+<meta property="og:description" content="Go EthereumOfficial golang implementation of the Ethereum protocol.  Automated builds are available for stable releases and the unstable master branch.Binary archives are published at https://geth.eth">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://camo.githubusercontent.com/915b7be44ada53c290eb157634330494ebe3e30a/68747470733a2f2f676f646f632e6f72672f6769746875622e636f6d2f676f6c616e672f6764646f3f7374617475732e737667">
+<meta property="og:image" content="https://badges.gitter.im/Join%20Chat.svg">
+<meta property="og:updated_time" content="2018-01-09T06:44:43.942Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="go-ethereum">
+<meta name="twitter:description" content="Go EthereumOfficial golang implementation of the Ethereum protocol.  Automated builds are available for stable releases and the unstable master branch.Binary archives are published at https://geth.eth">
+<meta name="twitter:image" content="https://camo.githubusercontent.com/915b7be44ada53c290eb157634330494ebe3e30a/68747470733a2f2f676f646f632e6f72672f6769746875622e636f6d2f676f6c616e672f6764646f3f7374617475732e737667">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://andyli.me/2018/01/09/go-ethereum/"/>
+
+
+
+
+
+  <title>go-ethereum | Andy的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fdf9f4f1115b81f5b69a5aaec2b965a4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Andy的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Gopher</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://andyli.me/2018/01/09/go-ethereum/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Andy Li">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Andy的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">go-ethereum</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-09T14:42:56+08:00">
+                2018-01-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Go-Ethereum"><a href="#Go-Ethereum" class="headerlink" title="Go Ethereum"></a>Go Ethereum</h2><p>Official golang implementation of the Ethereum protocol.</p>
+<p><a href="https://godoc.org/github.com/ethereum/go-ethereum" target="_blank" rel="noopener"><img src="https://camo.githubusercontent.com/915b7be44ada53c290eb157634330494ebe3e30a/68747470733a2f2f676f646f632e6f72672f6769746875622e636f6d2f676f6c616e672f6764646f3f7374617475732e737667" alt="API Reference"></a><br><a href="https://gitter.im/ethereum/go-ethereum?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge" target="_blank" rel="noopener"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a></p>
+<p>Automated builds are available for stable releases and the unstable master branch.<br>Binary archives are published at <a href="https://geth.ethereum.org/downloads/" target="_blank" rel="noopener">https://geth.ethereum.org/downloads/</a>.</p>
+<h2 id="Building-the-source"><a href="#Building-the-source" class="headerlink" title="Building the source"></a>Building the source</h2><p>For prerequisites and detailed build instructions please read the<br><a href="https://github.com/ethereum/go-ethereum/wiki/Building-Ethereum" target="_blank" rel="noopener">Installation Instructions</a><br>on the wiki.</p>
+<p>Building geth requires both a Go (version 1.7 or later) and a C compiler.<br>You can install them using your favourite package manager.<br>Once the dependencies are installed, run</p>
+<pre><code>make geth
+</code></pre><p>or, to build the full suite of utilities:</p>
+<pre><code>make all
+</code></pre><h2 id="Executables"><a href="#Executables" class="headerlink" title="Executables"></a>Executables</h2><p>The go-ethereum project comes with several wrappers/executables found in the <code>cmd</code> directory.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong><code>geth</code></strong></td>
+<td>Our main Ethereum CLI client. It is the entry point into the Ethereum network (main-, test- or private net), capable of running as a full node (default) archive node (retaining all historical state) or a light node (retrieving data live). It can be used by other processes as a gateway into the Ethereum network via JSON RPC endpoints exposed on top of HTTP, WebSocket and/or IPC transports. <code>geth --help</code> and the <a href="https://github.com/ethereum/go-ethereum/wiki/Command-Line-Options" target="_blank" rel="noopener">CLI Wiki page</a> for command line options.</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>abigen</code></td>
+<td>Source code generator to convert Ethereum contract definitions into easy to use, compile-time type-safe Go packages. It operates on plain <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI" target="_blank" rel="noopener">Ethereum contract ABIs</a> with expanded functionality if the contract bytecode is also available. However it also accepts Solidity source files, making development much more streamlined. Please see our <a href="https://github.com/ethereum/go-ethereum/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts" target="_blank" rel="noopener">Native DApps</a> wiki page for details.</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>bootnode</code></td>
+<td>Stripped down version of our Ethereum client implementation that only takes part in the network node discovery protocol, but does not run any of the higher level application protocols. It can be used as a lightweight bootstrap node to aid in finding peers in private networks.</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>evm</code></td>
+<td>Developer utility version of the EVM (Ethereum Virtual Machine) that is capable of running bytecode snippets within a configurable environment and execution mode. Its purpose is to allow isolated, fine-grained debugging of EVM opcodes (e.g. <code>evm --code 60ff60ff --debug</code>).</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>gethrpctest</code></td>
+<td>Developer utility tool to support our <a href="https://github.com/ethereum/rpc-tests" target="_blank" rel="noopener">ethereum/rpc-test</a> test suite which validates baseline conformity to the <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC" target="_blank" rel="noopener">Ethereum JSON RPC</a> specs. Please see the <a href="https://github.com/ethereum/rpc-tests/blob/master/README.md" target="_blank" rel="noopener">test suite’s readme</a> for details.</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>rlpdump</code></td>
+<td>Developer utility tool to convert binary RLP (<a href="https://github.com/ethereum/wiki/wiki/RLP" target="_blank" rel="noopener">Recursive Length Prefix</a>) dumps (data encoding used by the Ethereum protocol both network as well as consensus wise) to user friendlier hierarchical representation (e.g. <code>rlpdump --hex CE0183FFFFFFC4C304050583616263</code>).</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>swarm</code></td>
+<td>swarm daemon and tools. This is the entrypoint for the swarm network. <code>swarm --help</code> for command line options and subcommands. See <a href="https://swarm-guide.readthedocs.io" target="_blank" rel="noopener">https://swarm-guide.readthedocs.io</a> for swarm documentation.</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>puppeth</code></td>
+<td>a CLI wizard that aids in creating a new Ethereum network.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Running-geth"><a href="#Running-geth" class="headerlink" title="Running geth"></a>Running geth</h2><p>Going through all the possible command line flags is out of scope here (please consult our<br><a href="https://github.com/ethereum/go-ethereum/wiki/Command-Line-Options" target="_blank" rel="noopener">CLI Wiki page</a>), but we’ve<br>enumerated a few common parameter combos to get you up to speed quickly on how you can run your<br>own Geth instance.</p>
+<h3 id="Full-node-on-the-main-Ethereum-network"><a href="#Full-node-on-the-main-Ethereum-network" class="headerlink" title="Full node on the main Ethereum network"></a>Full node on the main Ethereum network</h3><p>By far the most common scenario is people wanting to simply interact with the Ethereum network:<br>create accounts; transfer funds; deploy and interact with contracts. For this particular use-case<br>the user doesn’t care about years-old historical data, so we can fast-sync quickly to the current<br>state of the network. To do so:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ geth --fast --cache=512 console</span><br></pre></td></tr></table></figure>
+<p>This command will:</p>
+<ul>
+<li>Start geth in fast sync mode (<code>--fast</code>), causing it to download more data in exchange for avoiding<br>processing the entire history of the Ethereum network, which is very CPU intensive.</li>
+<li>Bump the memory allowance of the database to 512MB (<code>--cache=512</code>), which can help significantly in<br>sync times especially for HDD users. This flag is optional and you can set it as high or as low as<br>you’d like, though we’d recommend the 512MB - 2GB range.</li>
+<li>Start up Geth’s built-in interactive <a href="https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console" target="_blank" rel="noopener">JavaScript console</a>,<br>(via the trailing <code>console</code> subcommand) through which you can invoke all official <a href="https://github.com/ethereum/wiki/wiki/JavaScript-API" target="_blank" rel="noopener"><code>web3</code> methods</a><br>as well as Geth’s own <a href="https://github.com/ethereum/go-ethereum/wiki/Management-APIs" target="_blank" rel="noopener">management APIs</a>.<br>This too is optional and if you leave it out you can always attach to an already running Geth instance<br>with <code>geth attach</code>.</li>
+</ul>
+<h3 id="Full-node-on-the-Ethereum-test-network"><a href="#Full-node-on-the-Ethereum-test-network" class="headerlink" title="Full node on the Ethereum test network"></a>Full node on the Ethereum test network</h3><p>Transitioning towards developers, if you’d like to play around with creating Ethereum contracts, you<br>almost certainly would like to do that without any real money involved until you get the hang of the<br>entire system. In other words, instead of attaching to the main network, you want to join the <strong>test</strong><br>network with your node, which is fully equivalent to the main network, but with play-Ether only.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ geth --testnet --fast --cache=512 console</span><br></pre></td></tr></table></figure>
+<p>The <code>--fast</code>, <code>--cache</code> flags and <code>console</code> subcommand have the exact same meaning as above and they<br>are equally useful on the testnet too. Please see above for their explanations if you’ve skipped to<br>here.</p>
+<p>Specifying the <code>--testnet</code> flag however will reconfigure your Geth instance a bit:</p>
+<ul>
+<li>Instead of using the default data directory (<code>~/.ethereum</code> on Linux for example), Geth will nest<br>itself one level deeper into a <code>testnet</code> subfolder (<code>~/.ethereum/testnet</code> on Linux). Note, on OSX<br>and Linux this also means that attaching to a running testnet node requires the use of a custom<br>endpoint since <code>geth attach</code> will try to attach to a production node endpoint by default. E.g.<br><code>geth attach &lt;datadir&gt;/testnet/geth.ipc</code>. Windows users are not affected by this.</li>
+<li>Instead of connecting the main Ethereum network, the client will connect to the test network,<br>which uses different P2P bootnodes, different network IDs and genesis states.</li>
+</ul>
+<p><em>Note: Although there are some internal protective measures to prevent transactions from crossing<br>over between the main network and test network, you should make sure to always use separate accounts<br>for play-money and real-money. Unless you manually move accounts, Geth will by default correctly<br>separate the two networks and will not make any accounts available between them.</em></p>
+<h3 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h3><p>As an alternative to passing the numerous flags to the <code>geth</code> binary, you can also pass a configuration file via:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ geth --config /path/to/your_config.toml</span><br></pre></td></tr></table></figure>
+<p>To get an idea how the file should look like you can use the <code>dumpconfig</code> subcommand to export your existing configuration:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ geth --your-favourite-flags dumpconfig</span><br></pre></td></tr></table></figure>
+<p><em>Note: This works only with geth v1.6.0 and above.</em></p>
+<h4 id="Docker-quick-start"><a href="#Docker-quick-start" class="headerlink" title="Docker quick start"></a>Docker quick start</h4><p>One of the quickest ways to get Ethereum up and running on your machine is by using Docker:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name ethereum-node -v /Users/alice/ethereum:/root \</span><br><span class="line">           -p 8545:8545 -p 30303:30303 \</span><br><span class="line">           ethereum/client-go --fast --cache=512</span><br></pre></td></tr></table></figure>
+<p>This will start geth in fast sync mode with a DB memory allowance of 512MB just as the above command does.  It will also create a persistent volume in your home directory for saving your blockchain as well as map the default ports. There is also an <code>alpine</code> tag available for a slim version of the image.</p>
+<p>Do not forget <code>--rpcaddr 0.0.0.0</code>, if you want to access RPC from other containers and/or hosts. By default, <code>geth</code> binds to the local interface and RPC endpoints is not accessible from the outside.</p>
+<h3 id="Programatically-interfacing-Geth-nodes"><a href="#Programatically-interfacing-Geth-nodes" class="headerlink" title="Programatically interfacing Geth nodes"></a>Programatically interfacing Geth nodes</h3><p>As a developer, sooner rather than later you’ll want to start interacting with Geth and the Ethereum<br>network via your own programs and not manually through the console. To aid this, Geth has built in<br>support for a JSON-RPC based APIs (<a href="https://github.com/ethereum/wiki/wiki/JSON-RPC" target="_blank" rel="noopener">standard APIs</a> and<br><a href="https://github.com/ethereum/go-ethereum/wiki/Management-APIs" target="_blank" rel="noopener">Geth specific APIs</a>). These can be<br>exposed via HTTP, WebSockets and IPC (unix sockets on unix based platforms, and named pipes on Windows).</p>
+<p>The IPC interface is enabled by default and exposes all the APIs supported by Geth, whereas the HTTP<br>and WS interfaces need to manually be enabled and only expose a subset of APIs due to security reasons.<br>These can be turned on/off and configured as you’d expect.</p>
+<p>HTTP based JSON-RPC API options:</p>
+<ul>
+<li><code>--rpc</code> Enable the HTTP-RPC server</li>
+<li><code>--rpcaddr</code> HTTP-RPC server listening interface (default: “localhost”)</li>
+<li><code>--rpcport</code> HTTP-RPC server listening port (default: 8545)</li>
+<li><code>--rpcapi</code> API’s offered over the HTTP-RPC interface (default: “eth,net,web3”)</li>
+<li><code>--rpccorsdomain</code> Comma separated list of domains from which to accept cross origin requests (browser enforced)</li>
+<li><code>--ws</code> Enable the WS-RPC server</li>
+<li><code>--wsaddr</code> WS-RPC server listening interface (default: “localhost”)</li>
+<li><code>--wsport</code> WS-RPC server listening port (default: 8546)</li>
+<li><code>--wsapi</code> API’s offered over the WS-RPC interface (default: “eth,net,web3”)</li>
+<li><code>--wsorigins</code> Origins from which to accept websockets requests</li>
+<li><code>--ipcdisable</code> Disable the IPC-RPC server</li>
+<li><code>--ipcapi</code> API’s offered over the IPC-RPC interface (default: “admin,debug,eth,miner,net,personal,shh,txpool,web3”)</li>
+<li><code>--ipcpath</code> Filename for IPC socket/pipe within the datadir (explicit paths escape it)</li>
+</ul>
+<p>You’ll need to use your own programming environments’ capabilities (libraries, tools, etc) to connect<br>via HTTP, WS or IPC to a Geth node configured with the above flags and you’ll need to speak <a href="http://www.jsonrpc.org/specification" target="_blank" rel="noopener">JSON-RPC</a><br>on all transports. You can reuse the same connection for multiple requests!</p>
+<p><strong>Note: Please understand the security implications of opening up an HTTP/WS based transport before<br>doing so! Hackers on the internet are actively trying to subvert Ethereum nodes with exposed APIs!<br>Further, all browser tabs can access locally running webservers, so malicious webpages could try to<br>subvert locally available APIs!</strong></p>
+<h3 id="Operating-a-private-network"><a href="#Operating-a-private-network" class="headerlink" title="Operating a private network"></a>Operating a private network</h3><p>Maintaining your own private network is more involved as a lot of configurations taken for granted in<br>the official networks need to be manually set up.</p>
+<h4 id="Defining-the-private-genesis-state"><a href="#Defining-the-private-genesis-state" class="headerlink" title="Defining the private genesis state"></a>Defining the private genesis state</h4><p>First, you’ll need to create the genesis state of your networks, which all nodes need to be aware of<br>and agree upon. This consists of a small JSON file (e.g. call it <code>genesis.json</code>):</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"config"</span>: &#123;</span><br><span class="line">        <span class="attr">"chainId"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"homesteadBlock"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"eip155Block"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"eip158Block"</span>: <span class="number">0</span></span><br><span class="line">    &#125;,</span><br><span class="line">  <span class="attr">"alloc"</span>      : &#123;&#125;,</span><br><span class="line">  <span class="attr">"coinbase"</span>   : <span class="string">"0x0000000000000000000000000000000000000000"</span>,</span><br><span class="line">  <span class="attr">"difficulty"</span> : <span class="string">"0x20000"</span>,</span><br><span class="line">  <span class="attr">"extraData"</span>  : <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"gasLimit"</span>   : <span class="string">"0x2fefd8"</span>,</span><br><span class="line">  <span class="attr">"nonce"</span>      : <span class="string">"0x0000000000000042"</span>,</span><br><span class="line">  <span class="attr">"mixhash"</span>    : <span class="string">"0x0000000000000000000000000000000000000000000000000000000000000000"</span>,</span><br><span class="line">  <span class="attr">"parentHash"</span> : <span class="string">"0x0000000000000000000000000000000000000000000000000000000000000000"</span>,</span><br><span class="line">  <span class="attr">"timestamp"</span>  : <span class="string">"0x00"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The above fields should be fine for most purposes, although we’d recommend changing the <code>nonce</code> to<br>some random value so you prevent unknown remote nodes from being able to connect to you. If you’d<br>like to pre-fund some accounts for easier testing, you can populate the <code>alloc</code> field with account<br>configs:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">"alloc": &#123;</span><br><span class="line">  "0x0000000000000000000000000000000000000001": &#123;"balance": "111111111"&#125;,</span><br><span class="line">  "0x0000000000000000000000000000000000000002": &#123;"balance": "222222222"&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>With the genesis state defined in the above JSON file, you’ll need to initialize <strong>every</strong> Geth node<br>with it prior to starting it up to ensure all blockchain parameters are correctly set:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ geth init path/to/genesis.json</span><br></pre></td></tr></table></figure>
+<h4 id="Creating-the-rendezvous-point"><a href="#Creating-the-rendezvous-point" class="headerlink" title="Creating the rendezvous point"></a>Creating the rendezvous point</h4><p>With all nodes that you want to run initialized to the desired genesis state, you’ll need to start a<br>bootstrap node that others can use to find each other in your network and/or over the internet. The<br>clean way is to configure and run a dedicated bootnode:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ bootnode --genkey=boot.key</span><br><span class="line">$ bootnode --nodekey=boot.key</span><br></pre></td></tr></table></figure>
+<p>With the bootnode online, it will display an <a href="https://github.com/ethereum/wiki/wiki/enode-url-format" target="_blank" rel="noopener"><code>enode</code> URL</a><br>that other nodes can use to connect to it and exchange peer information. Make sure to replace the<br>displayed IP address information (most probably <code>[::]</code>) with your externally accessible IP to get the<br>actual <code>enode</code> URL.</p>
+<p><em>Note: You could also use a full fledged Geth node as a bootnode, but it’s the less recommended way.</em></p>
+<h4 id="Starting-up-your-member-nodes"><a href="#Starting-up-your-member-nodes" class="headerlink" title="Starting up your member nodes"></a>Starting up your member nodes</h4><p>With the bootnode operational and externally reachable (you can try <code>telnet &lt;ip&gt; &lt;port&gt;</code> to ensure<br>it’s indeed reachable), start every subsequent Geth node pointed to the bootnode for peer discovery<br>via the <code>--bootnodes</code> flag. It will probably also be desirable to keep the data directory of your<br>private network separated, so do also specify a custom <code>--datadir</code> flag.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ geth --datadir=path/to/custom/data/folder --bootnodes=&lt;bootnode-enode-url-from-above&gt;</span><br></pre></td></tr></table></figure>
+<p><em>Note: Since your network will be completely cut off from the main and test networks, you’ll also<br>need to configure a miner to process transactions and create new blocks for you.</em></p>
+<h4 id="Running-a-private-miner"><a href="#Running-a-private-miner" class="headerlink" title="Running a private miner"></a>Running a private miner</h4><p>Mining on the public Ethereum network is a complex task as it’s only feasible using GPUs, requiring<br>an OpenCL or CUDA enabled <code>ethminer</code> instance. For information on such a setup, please consult the<br><a href="https://www.reddit.com/r/EtherMining/" target="_blank" rel="noopener">EtherMining subreddit</a> and the <a href="https://github.com/Genoil/cpp-ethereum" target="_blank" rel="noopener">Genoil miner</a><br>repository.</p>
+<p>In a private network setting however, a single CPU miner instance is more than enough for practical<br>purposes as it can produce a stable stream of blocks at the correct intervals without needing heavy<br>resources (consider running on a single thread, no need for multiple ones either). To start a Geth<br>instance for mining, run it with all your usual flags, extended by:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ geth &lt;usual-flags&gt; --mine --minerthreads=1 --etherbase=0x0000000000000000000000000000000000000000</span><br></pre></td></tr></table></figure>
+<p>Which will start mining blocks and transactions on a single CPU thread, crediting all proceedings to<br>the account specified by <code>--etherbase</code>. You can further tune the mining by changing the default gas<br>limit blocks converge to (<code>--targetgaslimit</code>) and the price transactions are accepted at (<code>--gasprice</code>).</p>
+<h2 id="Contribution"><a href="#Contribution" class="headerlink" title="Contribution"></a>Contribution</h2><p>Thank you for considering to help out with the source code! We welcome contributions from<br>anyone on the internet, and are grateful for even the smallest of fixes!</p>
+<p>If you’d like to contribute to go-ethereum, please fork, fix, commit and send a pull request<br>for the maintainers to review and merge into the main code base. If you wish to submit more<br>complex changes though, please check up with the core devs first on <a href="https://gitter.im/ethereum/go-ethereum" target="_blank" rel="noopener">our gitter channel</a><br>to ensure those changes are in line with the general philosophy of the project and/or get some<br>early feedback which can make both your efforts much lighter as well as our review and merge<br>procedures quick and simple.</p>
+<p>Please make sure your contributions adhere to our coding guidelines:</p>
+<ul>
+<li>Code must adhere to the official Go <a href="https://golang.org/doc/effective_go.html#formatting" target="_blank" rel="noopener">formatting</a> guidelines (i.e. uses <a href="https://golang.org/cmd/gofmt/" target="_blank" rel="noopener">gofmt</a>).</li>
+<li>Code must be documented adhering to the official Go <a href="https://golang.org/doc/effective_go.html#commentary" target="_blank" rel="noopener">commentary</a> guidelines.</li>
+<li>Pull requests need to be based on and opened against the <code>master</code> branch.</li>
+<li>Commit messages should be prefixed with the package(s) they modify.<ul>
+<li>E.g. “eth, rpc: make trace configs optional”</li>
+</ul>
+</li>
+</ul>
+<p>Please see the <a href="https://github.com/ethereum/go-ethereum/wiki/Developers&#39;-Guide" target="_blank" rel="noopener">Developers’ Guide</a><br>for more details on configuring your environment, managing project dependencies and testing procedures.</p>
+<h2 id="License"><a href="#License" class="headerlink" title="License"></a>License</h2><p>The go-ethereum library (i.e. all code outside of the <code>cmd</code> directory) is licensed under the<br><a href="https://www.gnu.org/licenses/lgpl-3.0.en.html" target="_blank" rel="noopener">GNU Lesser General Public License v3.0</a>, also<br>included in our repository in the <code>COPYING.LESSER</code> file.</p>
+<p>The go-ethereum binaries (i.e. all code inside of the <code>cmd</code> directory) is licensed under the<br><a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank" rel="noopener">GNU General Public License v3.0</a>, also included<br>in our repository in the <code>COPYING</code> file.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>觉得有用就支持一下我吧~~~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpeg" alt="Andy Li 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpeg" alt="Andy Li 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/golang/" rel="tag"># golang</a>
+          
+            <a href="/tags/ethereum/" rel="tag"># ethereum</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/07/golang-rpc/" rel="next" title="golang中的rpc包用法">
+                <i class="fa fa-chevron-left"></i> golang中的rpc包用法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Andy Li" />
+            
+              <p class="site-author-name" itemprop="name">Andy Li</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/andyidea" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:45716108@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.cnblogs.com/andyidea" title="我的博客园博客" target="_blank">我的博客园博客</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://segmentfault.com/u/andyidea" title="我的segmentfault" target="_blank">我的segmentfault</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://tonybai.com/" title="Tony Bai" target="_blank">Tony Bai</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.codingnow.com/" title="云风的 BLOG" target="_blank">云风的 BLOG</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.abelliu.com/" title="Abel's Blog" target="_blank">Abel's Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://zinbers.github.io/" title="zinbers" target="_blank">zinbers</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Go-Ethereum"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Go-Ethereum" class="headerlink" title="Go Ethereum"></a>Go Ethereum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Building-the-source"><span class="nav-number">2.</span> <span class="nav-text"><a href="#Building-the-source" class="headerlink" title="Building the source"></a>Building the source</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Executables"><span class="nav-number">3.</span> <span class="nav-text"><a href="#Executables" class="headerlink" title="Executables"></a>Executables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Running-geth"><span class="nav-number">4.</span> <span class="nav-text"><a href="#Running-geth" class="headerlink" title="Running geth"></a>Running geth</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Full-node-on-the-main-Ethereum-network"><span class="nav-number">4.1.</span> <span class="nav-text"><a href="#Full-node-on-the-main-Ethereum-network" class="headerlink" title="Full node on the main Ethereum network"></a>Full node on the main Ethereum network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Full-node-on-the-Ethereum-test-network"><span class="nav-number">4.2.</span> <span class="nav-text"><a href="#Full-node-on-the-Ethereum-test-network" class="headerlink" title="Full node on the Ethereum test network"></a>Full node on the Ethereum test network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Configuration"><span class="nav-number">4.3.</span> <span class="nav-text"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Docker-quick-start"><span class="nav-number">4.3.1.</span> <span class="nav-text"><a href="#Docker-quick-start" class="headerlink" title="Docker quick start"></a>Docker quick start</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Programatically-interfacing-Geth-nodes"><span class="nav-number">4.4.</span> <span class="nav-text"><a href="#Programatically-interfacing-Geth-nodes" class="headerlink" title="Programatically interfacing Geth nodes"></a>Programatically interfacing Geth nodes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Operating-a-private-network"><span class="nav-number">4.5.</span> <span class="nav-text"><a href="#Operating-a-private-network" class="headerlink" title="Operating a private network"></a>Operating a private network</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Defining-the-private-genesis-state"><span class="nav-number">4.5.1.</span> <span class="nav-text"><a href="#Defining-the-private-genesis-state" class="headerlink" title="Defining the private genesis state"></a>Defining the private genesis state</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Creating-the-rendezvous-point"><span class="nav-number">4.5.2.</span> <span class="nav-text"><a href="#Creating-the-rendezvous-point" class="headerlink" title="Creating the rendezvous point"></a>Creating the rendezvous point</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Starting-up-your-member-nodes"><span class="nav-number">4.5.3.</span> <span class="nav-text"><a href="#Starting-up-your-member-nodes" class="headerlink" title="Starting up your member nodes"></a>Starting up your member nodes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Running-a-private-miner"><span class="nav-number">4.5.4.</span> <span class="nav-text"><a href="#Running-a-private-miner" class="headerlink" title="Running a private miner"></a>Running a private miner</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Contribution"><span class="nav-number">5.</span> <span class="nav-text"><a href="#Contribution" class="headerlink" title="Contribution"></a>Contribution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#License"><span class="nav-number">6.</span> <span class="nav-text"><a href="#License" class="headerlink" title="License"></a>License</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Andy Li</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
