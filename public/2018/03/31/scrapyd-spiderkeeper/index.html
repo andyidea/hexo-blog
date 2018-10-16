@@ -90,7 +90,7 @@
 <meta property="og:description" content="最近公司爬虫的需求越来越多，所以打算用一套更专业的爬虫框架， 来实现一个爬虫系统，于是就想到了市面上比较流行的框架scrapy。 选择scrapy原因如下：  流行了很久，Github两万多的star 直接支持并发、存储、监控 功能强大，快速上手  相比较其他的解决方案，功能强大、快速上手是我选择scrapy一个很重要的原因。 直接支持并发、存储和监控虽说已经足够强大，但是离我设想的爬虫系统还缺少">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://andyli.me/2018/03/31/scrapyd-spiderkeeper/spiderkeeper.png">
-<meta property="og:updated_time" content="2018-03-31T15:20:19.151Z">
+<meta property="og:updated_time" content="2018-04-01T14:44:33.436Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用scrapyd和spiderkeeper构建scrapy爬虫系统">
 <meta name="twitter:description" content="最近公司爬虫的需求越来越多，所以打算用一套更专业的爬虫框架， 来实现一个爬虫系统，于是就想到了市面上比较流行的框架scrapy。 选择scrapy原因如下：  流行了很久，Github两万多的star 直接支持并发、存储、监控 功能强大，快速上手  相比较其他的解决方案，功能强大、快速上手是我选择scrapy一个很重要的原因。 直接支持并发、存储和监控虽说已经足够强大，但是离我设想的爬虫系统还缺少">
@@ -386,7 +386,7 @@
 <li>功能强大，快速上手</li>
 </ul>
 <p>相比较其他的解决方案，功能强大、快速上手是我选择scrapy一个很重要的原因。</p>
-<p>直接支持并发、存储和监控虽说已经足够强大，但是离我设想的爬虫系统还缺少两个重要的因素，定时任务和UI界面。后来找到了scrapyd和spiderkeeper，帮我解决了这两个问题。于是乎，这个爬虫系统就构建完成了，我们无需再造轮子构建一套爬虫系统，，只需把重点放在抓取数据的本身即可。</p>
+<p>直接支持并发、存储和监控虽说已经足够强大，但是离我设想的爬虫系统还缺少两个重要的因素，定时任务和UI界面。后来找到了scrapyd和spiderkeeper，帮我解决了这两个问题。于是乎，这个爬虫系统就构建完成了，我们无需再造轮子构建一套爬虫系统，只需把重点放在抓取数据的本身即可。</p>
 <h2 id="scrapyd"><a href="#scrapyd" class="headerlink" title="scrapyd"></a>scrapyd</h2><p>scrapyd 是由scrapy 官方提供的爬虫管理工具，使用它我们可以非常方便地上传、控制爬虫并且查看运行日志。</p>
 <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install scrapyd</span><br></pre></td></tr></table></figure>
 <h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>在scrapy项目下执行：</p>
