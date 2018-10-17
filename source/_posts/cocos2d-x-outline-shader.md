@@ -1,5 +1,6 @@
 ---
 title: Cocos2d-x中的sprite描边(Outline)
+date: 2017-02-11 14:40:10
 tags: [cocos2d-x,shader]
 ---
 

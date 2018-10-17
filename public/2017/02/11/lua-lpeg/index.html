@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="lua,lpeg," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Andy的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="原文：http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html 译者序：这个是官方的LPeg的文档。这段时间学习LPeg的时候发现国内关于LPeg的文章很少，所以决定把文档翻译一下。 翻译的不是很完整，只是常用的一部分，会慢慢的翻译下去，有同学能帮我补全的话就太感谢了。 介绍：LPeg是lua中一个新的模式匹配（pattern-matching）的库，基于">
+<meta name="keywords" content="lua,lpeg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【翻译】LPeg编程指南">
+<meta property="og:url" content="http://andyli.me/2017/02/11/lua-lpeg/index.html">
+<meta property="og:site_name" content="Andy的博客">
+<meta property="og:description" content="原文：http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html 译者序：这个是官方的LPeg的文档。这段时间学习LPeg的时候发现国内关于LPeg的文章很少，所以决定把文档翻译一下。 翻译的不是很完整，只是常用的一部分，会慢慢的翻译下去，有同学能帮我补全的话就太感谢了。 介绍：LPeg是lua中一个新的模式匹配（pattern-matching）的库，基于">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-10-17T03:14:35.350Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【翻译】LPeg编程指南">
+<meta name="twitter:description" content="原文：http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html 译者序：这个是官方的LPeg的文档。这段时间学习LPeg的时候发现国内关于LPeg的文章很少，所以决定把文档翻译一下。 翻译的不是很完整，只是常用的一部分，会慢慢的翻译下去，有同学能帮我补全的话就太感谢了。 介绍：LPeg是lua中一个新的模式匹配（pattern-matching）的库，基于">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://andyli.me/2017/02/11/lua-lpeg/"/>
+
+
+
+
+
+  <title>【翻译】LPeg编程指南 | Andy的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fdf9f4f1115b81f5b69a5aaec2b965a4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Andy的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Gopher & Finance</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://andyli.me/2017/02/11/lua-lpeg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Andy Li">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Andy的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【翻译】LPeg编程指南</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-11T14:40:10+08:00">
+                2017-02-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文：<a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#ex" target="_blank" rel="noopener">http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html</a></p>
+<h4 id="译者序："><a href="#译者序：" class="headerlink" title="译者序："></a>译者序：</h4><p>这个是官方的LPeg的文档。这段时间学习LPeg的时候发现国内关于LPeg的文章很少，所以决定把文档翻译一下。</p>
+<p>翻译的不是很完整，只是常用的一部分，会慢慢的翻译下去，有同学能帮我补全的话就太感谢了。</p>
+<h4 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h4><p>LPeg是lua中一个新的模式匹配（pattern-matching）的库，基于 <a href="http://pdos.csail.mit.edu/~baford/packrat/" target="_blank" rel="noopener">Parsing Expression Grammars</a> (PEGs)。本文是一个关于LPeg库的参考手册。关于更详细的文档，请看see <a href="http://www.inf.puc-rio.br/~roberto/docs/peg.pdf" target="_blank" rel="noopener">A Text Pattern-Matching Tool based on Parsing Expression Grammars</a>.，这里有关于实现的更详细的讨论。</p>
+<p>根据 Snobol的传统，LPeg定义patterns作为第一级别对象，也就是说 patterns 可以作为常规的lua变量(represented by userdata)。</p>
+<p>这个库提供了多种方式来创建和组合patterns。通过使用元方法，个别的一些函数可以提供类似中缀运算符或前缀运算符。一方面，相对于一般的正则表达式，LPeg匹配的结果通常更为详细。另一方面，第一级别的patterns可以更好的描写和扩展正则关系，我们可以定义函数来创建和组合patterns。</p>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-p" target="_blank" rel="noopener"><code>lpeg.P(string)</code></a></td>
+<td style="text-align:center">匹配字符串</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-p" target="_blank" rel="noopener"><code>lpeg.P(n)</code></a></td>
+<td style="text-align:center">匹配n个字符串</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-s" target="_blank" rel="noopener"><code>lpeg.S(string)</code></a></td>
+<td style="text-align:center">匹配字符串中任意一个字符 (Set)</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-r" target="_blank" rel="noopener"><code>lpeg.R(&quot;xy&quot;)</code></a></td>
+<td style="text-align:center">匹配x和y之间的任意一个字符(Range)</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-pow" target="_blank" rel="noopener"><code>patt^n</code></a></td>
+<td style="text-align:center"><code>匹配至少n个``patt</code></td>
+<td></td>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-pow" target="_blank" rel="noopener"><code>patt^-n</code></a></td>
+<td><code>匹配最多n个``patt</code></td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-mul" target="_blank" rel="noopener"><code>patt1 * patt2</code></a></td>
+<td style="text-align:center">先匹配<code>patt1</code> 然后接着匹配 <code>patt2</code></td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-add" target="_blank" rel="noopener"><code>patt1 + patt2</code></a></td>
+<td style="text-align:center">匹配满足<code>patt1</code> 或者满足<code>patt2</code> (二选一)</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-sub" target="_blank" rel="noopener"><code>patt1 - patt2</code></a></td>
+<td style="text-align:center">匹配满足patt1而且不满足patt2</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-unm" target="_blank" rel="noopener"><code>-patt</code></a></td>
+<td style="text-align:center">和 <code>(&quot;&quot; - patt)一样</code></td>
+<td></td>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-len" target="_blank" rel="noopener"><code>#patt</code></a></td>
+<td>Matches <code>patt</code> but consumes no input</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-behind" target="_blank" rel="noopener"><code>lpeg.B(patt)</code></a></td>
+<td style="text-align:center">Matches <code>patt</code> behind the current position, consuming no input</td>
+</tr>
+</tbody>
+</table>
+<p>举一个很简单的例子， lpeg.R(“09”)^1创建了一个pattern，这个pattern的作用是匹配一个非空的数字序列。再举一个稍微复杂一点的例子，-lpeg.P(1)匹配一个不能有任何字符的空字符串，这个通常用在匹配规则的最后。</p>
+<h3 id="Functions"><a href="#Functions" class="headerlink" title="Functions"></a>Functions</h3><h4 id="lpeg-match-pattern-subject-init"><a href="#lpeg-match-pattern-subject-init" class="headerlink" title="lpeg.match (pattern, subject [, init])"></a>lpeg.match (pattern, subject [, init])</h4><p>匹配函数。它试图通过一个给定的pattern来对目标字符串进行匹配。如果匹配成功， 则返回匹配成功子串的第一个字符的位置，或者返回捕获的值（如果成功捕获到值的话）。</p>
+<p>一个可选的数字参数 init 作为匹配目标字符串的起始位置。和通常的Lua库一样，如果参数是一个负数，则从目标字符串的最后一个字符开始向前计算，得到起始位置。</p>
+<p>和典型的匹配函数不同， match 仅仅在一个固定的模式下工作； 也就是说，它试着从目标字符串的前缀字符开始匹配，而不是匹配任意的子串。.所以，如果我们想匹配一个任意位置的子串，就必须用Lua写一个循环来把目标字符串的每一个位置作为起始位置匹配，或者写一个pattern来匹配任意字符。两种方法对比来说，第二种非常方便、快捷和高效，可以以看看下面的例子。</p>
+<h4 id="lpeg-type-value"><a href="#lpeg-type-value" class="headerlink" title="lpeg.type (value)"></a>lpeg.type (value)</h4><p>如果value是一个pattern，则返回一个字符串 “pattern”.，否则返回nil。</p>
+<h4 id="lpeg-version"><a href="#lpeg-version" class="headerlink" title="lpeg.version ()"></a>lpeg.version ()</h4><p>返回LPeg的字符串版本号。</p>
+<h4 id="lpeg-setmaxstack-max"><a href="#lpeg-setmaxstack-max" class="headerlink" title="lpeg.setmaxstack (max)"></a>lpeg.setmaxstack (max)</h4><p>设置堆栈的上限，默认是400。</p>
+<h3 id="Basic-Constructions"><a href="#Basic-Constructions" class="headerlink" title="Basic Constructions"></a>Basic Constructions</h3><p>####lpeg.P (value)</p>
+<p>用下面的规则将一个给定的值转换成一个合适的pattern：</p>
+<ul>
+<li>如果参数是一个pattern，则返回参数pattern。 </li>
+<li>如果参数是一个string，则返回匹配这个字符串的pattern。 </li>
+<li>如果参数是一个非负整数 <em>n</em>, 则返回一个匹配正好是n个字符的字符串的pattern。 </li>
+<li>如果参数是一个负整数 <em>-n</em>, 则只有在输入的字符串还剩下不到n个字符才会成。 lpeg.P(-n) 等同于 -lpeg.P(n) (see the <strong><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-unm" target="_blank" rel="noopener">unary minus operation</a></strong>). </li>
+<li>如果参数是一个 boolean, the result is a pattern that always succeeds or always fails (according to the boolean value), without consuming any input. </li>
+<li>如果参数是一个table, 则被解读为一个grammar (see <strong><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#grammar" target="_blank" rel="noopener">Grammars</a></strong>)。 </li>
+<li>如果参数是一个function, 则返回一个pattern，等价于一个 <strong><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#matchtime" target="_blank" rel="noopener">match-time capture</a></strong> 用一个空字符串匹配.</li>
+</ul>
+<h4 id="lpeg-B-patt"><a href="#lpeg-B-patt" class="headerlink" title="lpeg.B(patt)"></a>lpeg.B(patt)</h4><p>Returns a pattern that matches only if the input string at the current position is preceded by patt. Pattern patt must match only strings with some fixed length, and it cannot contain captures.<br>Like the <strong><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#op-len" target="_blank" rel="noopener">and predicate</a></strong>, this pattern never consumes any input, independently of success or failure.</p>
+<h4 id="lpeg-R-range"><a href="#lpeg-R-range" class="headerlink" title="lpeg.R ({range})"></a>lpeg.R ({range})</h4><p>返回一个在给定的范围内任何一个字符。范围是一个长度为2的字符串xy，返回的所有字符都是x和y对应ASCII编码之间（包括x和y）。<br> 举个例子， pattern lpeg.R(“09”) 匹配所有的数字，lpeg.R(“az”, “AZ”) 匹配所有的ASCII字母。</p>
+<h4 id="lpeg-S-string"><a href="#lpeg-S-string" class="headerlink" title="lpeg.S (string)"></a>lpeg.S (string)</h4><p>返回一个pattern匹配一个字符，这个字符是给定的string中的任何一个字符。 (The S stands for <em>Set</em>.)</p>
+<p>举个例子， pattern lpeg.S(“+-*/“) 匹配任何一个算术运算符。</p>
+<p>注意， 如果s是一个字符，那么 lpeg.P(s) 等价于 lpeg.S(s)。</p>
+<h4 id="lpeg-V-v"><a href="#lpeg-V-v" class="headerlink" title="lpeg.V (v)"></a>lpeg.V (v)</h4><p>This operation creates a non-terminal (a <em>variable</em>) for a grammar. The created non-terminal refers to the rule indexed by v in the enclosing grammar. (See <strong><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#grammar" target="_blank" rel="noopener">Grammars</a></strong> for details.)<br><strong>lpeg.locale ([table])</strong><br>Returns a table with patterns for matching some character classes according to the current locale. The table has fields named alnum, alpha, cntrl, digit, graph, lower, print, punct, space, upper, and xdigit, each one containing a correspondent pattern. Each pattern matches any single character that belongs to its class.<br>If called with an argument table, then it creates those fields inside the given table and returns that table.</p>
+<h4 id="patt"><a href="#patt" class="headerlink" title="#patt"></a>#patt</h4><p>Returns a pattern that matches only if the input string matches patt, but without consuming any input, independently of success or failure. (This pattern is called an <em>and predicate</em> and it is equivalent to <em>&amp;patt</em> in the original PEG notation.)<br>This pattern never produces any capture.</p>
+<h4 id="patt-1"><a href="#patt-1" class="headerlink" title="-patt"></a>-patt</h4><p>返回一个pattern，这个pattern要求输入的字符串不匹配patt。 它不消耗任何的输入，只是成功或者失败。 (This pattern is equivalent to <em>!patt</em> in the original PEG notation.)<br>举个例子，pattern -lpeg.P(1) 匹配字符串的末尾。</p>
+<p>这个pattern 从来不产生任何捕获，因为不是 patt失败就是 -patt 失败。 (一个失败的 pattern 从来不产生任何捕获 )</p>
+<h4 id="patt1-patt2"><a href="#patt1-patt2" class="headerlink" title="patt1 + patt2"></a>patt1 + patt2</h4><p>返回一个符合 patt1 或者 patt2的pattern。<br>如果 patt1 和 patt2 都是字符集合, 则得到的结果是两个的并集。<br>lower = lpeg.R(“az”)<br>upper = lpeg.R(“AZ”)<br>letter = lower + upper</p>
+<h4 id="patt1-patt2-1"><a href="#patt1-patt2-1" class="headerlink" title="patt1 - patt2"></a>patt1 - patt2</h4><p>相当于 <em>!patt2 patt1</em>。 这个pattern 意思是不匹配 patt2 且匹配 patt1。<br>如果成功了，则最后捕获到的是patt1的内容。这个pattern不会从patt2中捕获任何信息 (as either patt2 fails or patt1 - patt2 fails).<br>如果 patt1 和 patt2 都是字符集合，那么这个运算就相当于集合差。 注意 -patt等价于 “” - patt (or 0 - patt). 如果 patt 是一个字符集合， 1 - patt是它的补集。</p>
+<h4 id="patt1-patt2-2"><a href="#patt1-patt2-2" class="headerlink" title="patt1 * patt2"></a>patt1 * patt2</h4><p>返回一个pattern，这个pattern先匹配patt1，patt1匹配完成之后，从匹配完成的下一个字符开始匹配patt2。 The identity element for this operation is the pattern lpeg.P(true), which always succeeds.<br>     (LPeg uses the * operator [instead of the more obvious ..] both because it has the right priority and because in formal languages it is common to use a dot for denoting concatenation.)</p>
+<h4 id="patt-n"><a href="#patt-n" class="headerlink" title="patt^n"></a>patt^n</h4><p>如果 n 是一个非负数， 这个pattern等价于 <em>patt<strong>n</strong> patt*</em>。它匹配的条件是至少n个 patt。<br>另外， 如果n 是负数， 这个 pattern 等价于 <em>(patt?)__-n</em>: 它匹配的条件是最多 |n| 个 patt。<br>在个别情况下， 在原始的 PEG 中 ，patt^0 等价于 <em>patt*</em>, patt^1 等价于 <em>patt+，</em> patt^-1 等价于 <em>patt?</em>。<br>在所有的情况下， the resulting pattern is greedy with no backtracking (also called a <em>possessive</em> repetition).注意，patt^n只会匹配最长的序列。</p>
+<h4 id="Grammar"><a href="#Grammar" class="headerlink" title="Grammar"></a>Grammar</h4><p>在lua的环境下，可以自定义一些patterns，让新定义的pattern可以使用已经定义过的旧的pattern，然而，这些技巧不允许定义循环的patterns。 For recursive patterns, we need real grammars.<br>LPeg通过使用table来定义gramar， table的每个条目是一条规则。</p>
+<h4 id="Captures"><a href="#Captures" class="headerlink" title="Captures"></a>Captures</h4><p><em>capture</em> 是一个pattern匹配成功之后捕获的值。 LPeg提供多种捕获方式， 基于pattern的匹配和组合来产生不同的捕获值。<br>下面是捕获的基本概述：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Operation</strong></th>
+<th style="text-align:center"><strong>What it Produces</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-c" target="_blank" rel="noopener"><code>lpeg.C(patt)</code></a></td>
+<td style="text-align:center">所有pattern捕获的子串</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-arg" target="_blank" rel="noopener"><code>lpeg.Carg(n)</code></a></td>
+<td style="text-align:center">the value of the nth extra argument to <code>lpeg.match</code> (matches the empty string)</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-b" target="_blank" rel="noopener"><code>lpeg.Cb(name)</code></a></td>
+<td style="text-align:center">the values produced by the previous group capture named <code>name</code> (matches the empty string)</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-cc" target="_blank" rel="noopener"><code>lpeg.Cc(values)</code></a></td>
+<td style="text-align:center">the given values (matches the empty string)</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-f" target="_blank" rel="noopener"><code>lpeg.Cf(patt, func)</code></a></td>
+<td style="text-align:center">捕获的结果将作为参数依次被func调用</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-g" target="_blank" rel="noopener"><code>lpeg.Cg(patt [, name])</code></a></td>
+<td style="text-align:center">把patt所有的返回值作为一个返回值并指定一个名字</td>
+<td></td>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-p" target="_blank" rel="noopener"><code>lpeg.Cp()</code></a></td>
+<td>捕获的位置</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-s" target="_blank" rel="noopener"><code>lpeg.Cs(patt)</code></a></td>
+<td style="text-align:center">创建一个替代捕获</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-t" target="_blank" rel="noopener"><code>lpeg.Ct(patt)</code></a></td>
+<td style="text-align:center">把patt中所有的返回值按照父子关系放到一个数组里返回</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-string" target="_blank" rel="noopener"><code>patt / string</code></a></td>
+<td style="text-align:center"><code>string</code>, with some marks replaced by captures of <code>patt</code></td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-num" target="_blank" rel="noopener"><code>patt / number</code></a></td>
+<td style="text-align:center">the n-th value captured by <code>patt</code>, or no value when <code>number</code> is zero.</td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-query" target="_blank" rel="noopener"><code>patt / table</code></a></td>
+<td style="text-align:center"><code>table[c]</code>, where <code>c</code> is the (first) capture of <code>patt</code></td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-func" target="_blank" rel="noopener"><code>patt / function</code></a></td>
+<td style="text-align:center">the returns of <code>function</code> applied to the captures of <code>patt</code></td>
+</tr>
+<tr>
+<td><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#matchtime" target="_blank" rel="noopener"><code>lpeg.Cmt(patt, function)</code></a></td>
+<td style="text-align:center">the returns of <code>function</code> applied to the captures of <code>patt</code>; the application is done at match time</td>
+</tr>
+</tbody>
+</table>
+<h4 id="lpeg-C-patt"><a href="#lpeg-C-patt" class="headerlink" title="lpeg.C (patt)"></a>lpeg.C (patt)</h4><p>返回匹配到的子字符串以及patt内部子patt的返回值。</p>
+<h4 id="lpeg-Carg-n"><a href="#lpeg-Carg-n" class="headerlink" title="lpeg.Carg (n)"></a>lpeg.Carg (n)</h4><p>Creates an <em>argument capture</em>. This pattern matches the empty string and produces the value given as the nth extra argument given in the call to lpeg.match.</p>
+<h4 id="lpeg-Cb-name"><a href="#lpeg-Cb-name" class="headerlink" title="lpeg.Cb (name)"></a>lpeg.Cb (name)</h4><p>Creates a <em>back capture</em>. This pattern matches the empty string and produces the values produced by the <em>most recent</em> <strong><a href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html#cap-g" target="_blank" rel="noopener">group capture</a></strong> named name (where name can be any Lua value).<br><em>Most recent</em> means the last <em>complete</em> <em>outermost</em> group capture with the given name. A <em>Complete</em> capture means that the entire pattern corresponding to the capture has matched. An <em>Outermost</em> capture means that the capture is not inside another complete capture.</p>
+<h4 id="lpeg-Cc-value-…"><a href="#lpeg-Cc-value-…" class="headerlink" title="lpeg.Cc ([value, …])"></a>lpeg.Cc ([value, …])</h4><p>Creates a <em>constant capture</em>. This pattern matches the empty string and produces all given values as its captured values.</p>
+<h4 id="lpeg-Cf-patt-func"><a href="#lpeg-Cf-patt-func" class="headerlink" title="lpeg.Cf (patt, func)"></a>lpeg.Cf (patt, func)</h4><p>创建一个折叠的捕获，假设patt有n个返回值,C1,C2,C3,那么Cf返回 f(f( f(C1),C2), C3)。<br>举个例子，一个用逗号隔开的数字序列，计算出数字串中每个数字相加的结果：<br>– matches a numeral and captures its numerical value<br>number = lpeg.R”09”^1 / tonumber</p>
+<p>– matches a list of numbers, capturing their values<br>list = number <em> (“,” </em> number)^0</p>
+<p>– auxiliary function to add two numbers<br>function add (acc, newvalue) return acc + newvalue end</p>
+<p>– folds the list of numbers adding them<br>sum = lpeg.Cf(list, add) – example of use<br>print(sum:match(“10,30,43”))  –&gt; 83</p>
+<h4 id="lpeg-Cg-patt-name"><a href="#lpeg-Cg-patt-name" class="headerlink" title="lpeg.Cg (patt [, name])"></a>lpeg.Cg (patt [, name])</h4><p>创建一个捕获的集合，这组返回的所有值型成一个捕获。集合可能是匿名(如果没有名字)或命名的(可以是任何非nil值Lua值)。</p>
+<h4 id="lpeg-Cp"><a href="#lpeg-Cp" class="headerlink" title="lpeg.Cp ()"></a>lpeg.Cp ()</h4><p>Creates a <em>position capture</em>. It matches the empty string and captures the position in the subject where the match occurs. The captured value is a number.</p>
+<h4 id="lpeg-Cs-patt"><a href="#lpeg-Cs-patt" class="headerlink" title="lpeg.Cs (patt)"></a>lpeg.Cs (patt)</h4><p>Creates a <em>substitution capture</em>, which captures the substring of the subject that matches patt, with <em>substitutions</em>. For any capture inside patt with a value, the substring that matched the capture is replaced by the capture value (which should be a string). The final captured value is the string resulting from all replacements.</p>
+<h4 id="lpeg-Ct-patt"><a href="#lpeg-Ct-patt" class="headerlink" title="lpeg.Ct (patt)"></a>lpeg.Ct (patt)</h4><p>创建一个捕获的数组。  创建一个表捕获;这个捕获将创建一个表,将匿名的捕获保存到表中,索引从1开始.对于命名组捕获,以组名为key。<br><strong>注：下面的内容由于开源中国已经翻译完成故不再翻译</strong><a href="http://www.oschina.net/translate/lpeg-syntax" target="_blank" rel="noopener">http://www.oschina.net/translate/lpeg-syntax</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>觉得有用就支持一下我吧~~~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpeg" alt="Andy Li 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpeg" alt="Andy Li 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/lua/" rel="tag"># lua</a>
+          
+            <a href="/tags/lpeg/" rel="tag"># lpeg</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/11/golang-rpc/" rel="next" title="golang中的rpc包用法">
+                <i class="fa fa-chevron-left"></i> golang中的rpc包用法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/11/cocos2d-x-gray-shader/" rel="prev" title="Cocos2d-x中的灰度shader">
+                Cocos2d-x中的灰度shader <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Andy Li" />
+            
+              <p class="site-author-name" itemprop="name">Andy Li</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/andyidea" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:45716108@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.cnblogs.com/andyidea" title="我的博客园博客" target="_blank">我的博客园博客</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://segmentfault.com/u/andyidea" title="我的segmentfault" target="_blank">我的segmentfault</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://tonybai.com/" title="Tony Bai" target="_blank">Tony Bai</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.codingnow.com/" title="云风的 BLOG" target="_blank">云风的 BLOG</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.abelliu.com/" title="Abel's Blog" target="_blank">Abel's Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://zinbers.github.io/" title="zinbers" target="_blank">zinbers</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#译者序："><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x8BD1;&#x8005;&#x5E8F;&#xFF1A;" class="headerlink" title="&#x8BD1;&#x8005;&#x5E8F;&#xFF1A;"></a>&#x8BD1;&#x8005;&#x5E8F;&#xFF1A;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#介绍："><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x4ECB;&#x7ECD;&#xFF1A;" class="headerlink" title="&#x4ECB;&#x7ECD;&#xFF1A;"></a>&#x4ECB;&#x7ECD;&#xFF1A;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Functions"><span class="nav-number"></span> <span class="nav-text"><a href="#Functions" class="headerlink" title="Functions"></a>Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-match-pattern-subject-init"><span class="nav-number">1.</span> <span class="nav-text"><a href="#lpeg-match-pattern-subject-init" class="headerlink" title="lpeg.match (pattern, subject [, init])"></a>lpeg.match (pattern, subject [, init])</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-type-value"><span class="nav-number">2.</span> <span class="nav-text"><a href="#lpeg-type-value" class="headerlink" title="lpeg.type (value)"></a>lpeg.type (value)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-version"><span class="nav-number">3.</span> <span class="nav-text"><a href="#lpeg-version" class="headerlink" title="lpeg.version ()"></a>lpeg.version ()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-setmaxstack-max"><span class="nav-number">4.</span> <span class="nav-text"><a href="#lpeg-setmaxstack-max" class="headerlink" title="lpeg.setmaxstack (max)"></a>lpeg.setmaxstack (max)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-Constructions"><span class="nav-number"></span> <span class="nav-text"><a href="#Basic-Constructions" class="headerlink" title="Basic Constructions"></a>Basic Constructions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-B-patt"><span class="nav-number">1.</span> <span class="nav-text"><a href="#lpeg-B-patt" class="headerlink" title="lpeg.B(patt)"></a>lpeg.B(patt)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-R-range"><span class="nav-number">2.</span> <span class="nav-text"><a href="#lpeg-R-range" class="headerlink" title="lpeg.R ({range})"></a>lpeg.R ({range})</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-S-string"><span class="nav-number">3.</span> <span class="nav-text"><a href="#lpeg-S-string" class="headerlink" title="lpeg.S (string)"></a>lpeg.S (string)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-V-v"><span class="nav-number">4.</span> <span class="nav-text"><a href="#lpeg-V-v" class="headerlink" title="lpeg.V (v)"></a>lpeg.V (v)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#patt"><span class="nav-number">5.</span> <span class="nav-text"><a href="#patt" class="headerlink" title="#patt"></a>#patt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#patt-1"><span class="nav-number">6.</span> <span class="nav-text"><a href="#patt-1" class="headerlink" title="-patt"></a>-patt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#patt1-patt2"><span class="nav-number">7.</span> <span class="nav-text"><a href="#patt1-patt2" class="headerlink" title="patt1 + patt2"></a>patt1 + patt2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#patt1-patt2-1"><span class="nav-number">8.</span> <span class="nav-text"><a href="#patt1-patt2-1" class="headerlink" title="patt1 - patt2"></a>patt1 - patt2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#patt1-patt2-2"><span class="nav-number">9.</span> <span class="nav-text"><a href="#patt1-patt2-2" class="headerlink" title="patt1 * patt2"></a>patt1 * patt2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#patt-n"><span class="nav-number">10.</span> <span class="nav-text"><a href="#patt-n" class="headerlink" title="patt^n"></a>patt^n</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Grammar"><span class="nav-number">11.</span> <span class="nav-text"><a href="#Grammar" class="headerlink" title="Grammar"></a>Grammar</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Captures"><span class="nav-number">12.</span> <span class="nav-text"><a href="#Captures" class="headerlink" title="Captures"></a>Captures</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-C-patt"><span class="nav-number">13.</span> <span class="nav-text"><a href="#lpeg-C-patt" class="headerlink" title="lpeg.C (patt)"></a>lpeg.C (patt)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-Carg-n"><span class="nav-number">14.</span> <span class="nav-text"><a href="#lpeg-Carg-n" class="headerlink" title="lpeg.Carg (n)"></a>lpeg.Carg (n)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-Cb-name"><span class="nav-number">15.</span> <span class="nav-text"><a href="#lpeg-Cb-name" class="headerlink" title="lpeg.Cb (name)"></a>lpeg.Cb (name)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-Cc-value-…"><span class="nav-number">16.</span> <span class="nav-text"><a href="#lpeg-Cc-value-&#x2026;" class="headerlink" title="lpeg.Cc ([value, &#x2026;])"></a>lpeg.Cc ([value, &#x2026;])</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-Cf-patt-func"><span class="nav-number">17.</span> <span class="nav-text"><a href="#lpeg-Cf-patt-func" class="headerlink" title="lpeg.Cf (patt, func)"></a>lpeg.Cf (patt, func)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-Cg-patt-name"><span class="nav-number">18.</span> <span class="nav-text"><a href="#lpeg-Cg-patt-name" class="headerlink" title="lpeg.Cg (patt [, name])"></a>lpeg.Cg (patt [, name])</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-Cp"><span class="nav-number">19.</span> <span class="nav-text"><a href="#lpeg-Cp" class="headerlink" title="lpeg.Cp ()"></a>lpeg.Cp ()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-Cs-patt"><span class="nav-number">20.</span> <span class="nav-text"><a href="#lpeg-Cs-patt" class="headerlink" title="lpeg.Cs (patt)"></a>lpeg.Cs (patt)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpeg-Ct-patt"><span class="nav-number">21.</span> <span class="nav-text"><a href="#lpeg-Ct-patt" class="headerlink" title="lpeg.Ct (patt)"></a>lpeg.Ct (patt)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Andy Li</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

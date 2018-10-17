@@ -1,5 +1,6 @@
 ---
 title: homebrew常用命令
+date: 2017-02-11 14:40:10
 tags: [homebrew]
 ---
 
